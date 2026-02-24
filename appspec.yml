@@ -1,0 +1,23 @@
+version: 0.0
+os: linux
+files:
+  # This tells AWS: "Take everything from my GitHub repo..."
+  - source: /
+  # "...and put it into this folder on my EC2 instance."
+    destination: /home/ec2-user/student-system
+permissions:
+  - object: /home/ec2-user/student-system
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+hooks:
+  # After the files are copied, run the install script
+  AfterInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: ec2-user
+  # Finally, run the start script
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: ec2-user
