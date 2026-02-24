@@ -19,8 +19,8 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         # These secrets must be added to your GitHub Repo Settings
-        aws-access-key-id: ${{ node_js }}
-        aws-secret-access-key: ${{ node_secret }}
+        aws-access-key-id: ${{ NODE_JS }}
+        aws-secret-access-key: ${{ NODE_SECRET }}
         aws-region: ap-south-1
 
     - name: Create CodeDeploy Deployment
