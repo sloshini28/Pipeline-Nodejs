@@ -1,0 +1,40 @@
+name: Deploy to Amazon EC2
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        # These secrets must be added to your GitHub Repo Settings
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ap-south-1
+
+    - name: Create CodeDeploy Deployment
+      run: |
+        # Logic to choose the correct Deployment Group based on branch
+        if [ "${{ github.ref_name }}" = "main" ]; then
+          DEPLOYMENT_GROUP="production-group"
+        else
+          DEPLOYMENT_GROUP="development-group"
+        fi
+
+        echo "Deploying to $DEPLOYMENT_GROUP..."
+
+        aws deploy create-deployment \
+          --application-name MyNodeApp \
+          --deployment-group-name $DEPLOYMENT_GROUP \
+          --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
