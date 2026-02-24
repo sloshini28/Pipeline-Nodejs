@@ -35,6 +35,6 @@ jobs:
         echo "Deploying to $DEPLOYMENT_GROUP..."
 
         aws deploy create-deployment \
-          --application-name MyNodeApp \
+          --application-name Mynodeapp \
           --deployment-group-name $DEPLOYMENT_GROUP \
           --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
